@@ -26,7 +26,6 @@ logging.basicConfig(level=logging.INFO)
 # то мы уберем одну подсказку. Как будто что-то меняется :)
 sessionStorage = {}
 
-obj = 'слон'
 
 @app.route('/post', methods=['POST'])
 # Функция получает тело запроса и возвращает ответ.
@@ -48,16 +47,6 @@ def main():
     # Отправляем request.json и response в функцию handle_dialog.
     # Она сформирует оставшиеся поля JSON, которые отвечают
     # непосредственно за ведение диалога
-    handle_dialog(request.json, response)
-    
-    response = {
-        'session': request.json['session'],
-        'version': request.json['version'],
-        'response': {
-            'end_session': False
-        }
-    }
-    
     handle_dialog(request.json, response)
 
     logging.info(f'Response:  {response!r}')
@@ -82,7 +71,7 @@ def handle_dialog(req, res):
             ]
         }
         # Заполняем текст ответа
-        res['response']['text'] = f'Привет! Купи {obj}а!'
+        res['response']['text'] = 'Привет! Купи слона!'
         # Получим подсказки
         res['response']['buttons'] = get_suggests(user_id)
         return
@@ -100,18 +89,17 @@ def handle_dialog(req, res):
         'куплю',
         'покупаю',
         'хорошо',
-        'Я покупаю',
-        'Я куплю'
+        'я покупаю',
+        'я куплю'
     ]:
         # Пользователь согласился, прощаемся.
-        res['response']['text'] = f'{obj}а можно найти на Яндекс.Маркете!'
+        res['response']['text'] = 'Слона можно найти на Яндекс.Маркете!'
         res['response']['end_session'] = True
-        obj = 'кролик'
-        return 
+        return
 
     # Если нет, то убеждаем его купить слона!
     res['response']['text'] = \
-        f"Все говорят '{req['request']['original_utterance']}', а ты купи {obj}а!"
+        f"Все говорят '{req['request']['original_utterance']}', а ты купи слона!"
     res['response']['buttons'] = get_suggests(user_id)
 
 
@@ -134,7 +122,7 @@ def get_suggests(user_id):
     if len(suggests) < 2:
         suggests.append({
             "title": "Ладно",
-            "url": f"https://market.yandex.ru/search?text={obj}",
+            "url": "https://market.yandex.ru/search?text=слон",
             "hide": True
         })
 
