@@ -1,4 +1,5 @@
 #  @YLliteratorbot
+# задача про стих
 
 import logging
 from telegram.ext import Application, MessageHandler, filters
