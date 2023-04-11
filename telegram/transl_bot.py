@@ -17,6 +17,9 @@ BOT_TOKEN = '5921422933:AAGSdehY8F2nXo2UuELxED0MqgCv02y6BzY'
 language = 1
 
 
+reply_keyboard = [['/ru-en'], ['/en-ru']]
+markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
+
 
 def translator1(txt):
     translator = Translator() 
@@ -63,8 +66,6 @@ async def answer(update, context):
     
 
 async def start(update, context):
-    reply_keyboard = [['/ru-en'], ['/en-ru']]
-    markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
     await update.message.reply_text("Я бот-переводчик, выберите язык:", reply_markup=markup)
     
 
