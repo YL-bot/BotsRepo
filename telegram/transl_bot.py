@@ -1,4 +1,4 @@
-# @TranslYLbot
+# @translatorYlbot
 # задача про перевод
 
 import logging
@@ -11,7 +11,7 @@ from telegram import ReplyKeyboardMarkup
 from googletrans import Translator, constants
 
 
-BOT_TOKEN = '6181021435:AAERJar6_wtLFDONNE8g0tITitWrGMlHlNE'
+BOT_TOKEN = '5921422933:AAGSdehY8F2nXo2UuELxED0MqgCv02y6BzY'
 
 
 language = 1
@@ -36,6 +36,7 @@ async def ru_en(update, context):
     global language
     language = 1
     await update.message.reply_text('Введите текст:')
+    return 1
     
 
 
@@ -43,6 +44,7 @@ async def en_ru(update, context):
     global language
     language = 2
     await update.message.reply_text('Введите текст:')
+    return 1
     
     
 async def answer(update, context):   
@@ -55,30 +57,49 @@ async def answer(update, context):
     
     await update.message.reply_text(text)
     
-    await context.bot.send_message(update.message.chat_id, text=f'Нажмите /start для нового перевода')
+    return ConversationHandler.END
+    
+    #await context.bot.send_message(update.message.chat_id, text=f'Нажмите /start для нового перевода')
     
 
 async def start(update, context):
-    #await update.message.reply_text("Я бот-переводчик, выберите язык:", reply_markup=markup)
+    reply_keyboard = [['/ru-en'], ['/en-ru']]
+    markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
+    await update.message.reply_text("Я бот-переводчик, выберите язык:", reply_markup=markup)
     
-    await update.message.reply_text("Я бот-переводчик, выберите язык:")
-    
+
+async def stop(update, context):
+    await update.message.reply_text("Всего доброго!")
+    return ConversationHandler.END
+
 
 def main():
-    application = Application.builder().token(BOT_TOKEN).build()
+    application = Application.builder().token('5921422933:AAGSdehY8F2nXo2UuELxED0MqgCv02y6BzY').build()
     
-    text_handler = MessageHandler(filters.TEXT & ~filters.COMMAND, answer)
+    conv_handler = ConversationHandler(
+        # Точка входа в диалог.
+        # В данном случае — команда /start. Она задаёт первый вопрос.
+        entry_points=[CommandHandler('start', start)],
 
-    application.add_handler(text_handler)
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("ru-en", ru_en))
-    application.add_handler(CommandHandler("en-ru", en_ru))
-    
-    #reply_keyboard = [['/ru-en'], ['/en-ru']]
-    #markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
-    
+        # Состояние внутри диалога.
+        # Вариант с двумя обработчиками, фильтрующими текстовые сообщения.
+        states={
+            # Функция читает ответ на первый вопрос и задаёт второй.
+            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, answer)],
+            # Функция читает ответ на второй вопрос и завершает диалог.
+            2: [CommandHandler("ru-en", ru_en)], 
+            3: [CommandHandler("en-ru", en_ru)]
+            
+        },
+        # Точка прерывания диалога. В данном случае — команда /stop.
+        fallbacks=[CommandHandler('stop', stop)]
+    )
 
+    application.add_handler(conv_handler)
+
+    # Запускаем приложение.
     application.run_polling()
+
 
 # Запускаем функцию main() в случае запуска скрипта.
 if __name__ == '__main__':
