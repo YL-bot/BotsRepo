@@ -74,7 +74,7 @@ async def stop(update, context):
 
 
 def main():
-    application = Application.builder().token('5921422933:AAGSdehY8F2nXo2UuELxED0MqgCv02y6BzY').build()
+    application = Application.builder().token(BOT_TOKEN).build()
     
     conv_handler = ConversationHandler(
         # Точка входа в диалог.
