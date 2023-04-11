@@ -1,4 +1,7 @@
 # для 1,2, 5-7
+#купи слоника - в этом навыке
+
+#https://dialogs.yandex.ru/
 
 from flask import Flask, request
 import logging

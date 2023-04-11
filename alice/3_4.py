@@ -1,3 +1,9 @@
+#3-4 
+# Навык Бога
+
+#https://dialogs.yandex.ru/
+
+
 from flask import Flask, request, jsonify
 import logging
 import json
