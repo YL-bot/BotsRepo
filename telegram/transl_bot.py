@@ -1,107 +1,60 @@
 # @translatorYlbot
 # задача про перевод
-
 import logging
-from telegram.ext import Application, MessageHandler, filters, Updater
-from telegram.ext import CommandHandler, ConversationHandler
-import datetime
-import json
-import random
-from telegram import ReplyKeyboardMarkup
-from googletrans import Translator, constants
+from telegram.ext import Application, MessageHandler, filters, CommandHandler, ConversationHandler
+from telegram import ReplyKeyboardMarkup, Bot, ReplyKeyboardRemove
+import requests
 
 
 BOT_TOKEN = '5921422933:AAGSdehY8F2nXo2UuELxED0MqgCv02y6BzY'
 
+logger = logging.getLogger(__name__)
+bot = Bot(BOT_TOKEN)
+API_KEY = 'AQVNzhfpiSw09Z_EBDWdUtal9XPJR_I5lVASpWlT'
+FOLDER_ID = 'b1go7l39akkvmdgv9j16'
 
-language = 1
-
-
-reply_keyboard = [['/ru-en'], ['/en-ru']]
-markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
-
-
-def translator1(txt):
-    translator = Translator() 
-    translation = translator.translate(txt, dest='en')     
-    
-    return translation.text
-
-
-def translator2(txt):
-    translator = Translator()
-    translation = translator.translate(txt, dest='ru')     
-    
-    return translation.text
-
-
-async def ru_en(update, context):
-    global language
-    language = 1
-    await update.message.reply_text('Введите текст:')
-    return 1
-    
-
-
-async def en_ru(update, context):
-    global language
-    language = 2
-    await update.message.reply_text('Введите текст:')
-    return 1
-    
-    
-async def answer(update, context):   
-    global language
-    
-    if language == 2:
-        text = translator2(update.message.text)
-    else:
-        text = translator1(update.message.text)
-    
-    await update.message.reply_text(text)
-    
-    return ConversationHandler.END
-    
-    #await context.bot.send_message(update.message.chat_id, text=f'Нажмите /start для нового перевода')
-    
 
 async def start(update, context):
-    await update.message.reply_text("Я бот-переводчик, выберите язык:", reply_markup=markup)
-    
+    kbrd = ReplyKeyboardMarkup([['RU -> EN', 'EN -> RU']])
+    await update.message.reply_text('Привет. Выбери направление перевода.', reply_markup=kbrd)
+    context.user_data['way'] = -1
 
-async def stop(update, context):
-    await update.message.reply_text("Всего доброго!")
-    return ConversationHandler.END
+
+async def change_lang(update, context):
+    txt = update.message.text
+    if txt not in ['RU -> EN', 'EN -> RU']:
+        if not context.user_data.get('way') or context.user_data['way'] == -1:
+            await update.message.reply_text('Выберите направление перевода.')
+            return
+        elif context.user_data['way'] == 'RU -> EN':
+            body = {"targetLanguageCode": "en", "languageCode": "ru", "texts": txt,
+                    "folderId": FOLDER_ID}
+            headers = {"Content-Type": "application/json", "Authorization": f"Api-Key {API_KEY}"}
+            response = requests.post('https://translate.api.cloud.yandex.net/translate/v2/translate',
+                                     json=body, headers=headers)
+            res = response.json()['translations'][0]['text']
+        else:
+            body = {"targetLanguageCode": "ru", "languageCode": "en", "texts": txt,
+                    "folderId": FOLDER_ID}
+            headers = {"Content-Type": "application/json", "Authorization": f"Api-Key {API_KEY}"}
+            response = requests.post(
+                'https://translate.api.cloud.yandex.net/translate/v2/translate',
+                json=body, headers=headers)
+            res = response.json()['translations'][0]['text']
+        await update.message.reply_text(f'Результат:\n{res}')
+    else:
+        context.user_data['way'] = txt
 
 
 def main():
     application = Application.builder().token(BOT_TOKEN).build()
-    
-    conv_handler = ConversationHandler(
-        # Точка входа в диалог.
-        # В данном случае — команда /start. Она задаёт первый вопрос.
-        entry_points=[CommandHandler('start', start)],
 
-        # Состояние внутри диалога.
-        # Вариант с двумя обработчиками, фильтрующими текстовые сообщения.
-        states={
-            # Функция читает ответ на первый вопрос и задаёт второй.
-            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, answer)],
-            # Функция читает ответ на второй вопрос и завершает диалог.
-            2: [CommandHandler("ru-en", ru_en)], 
-            3: [CommandHandler("en-ru", en_ru)]
-            
-        },
-        # Точка прерывания диалога. В данном случае — команда /stop.
-        fallbacks=[CommandHandler('stop', stop)]
-    )
-
-    application.add_handler(conv_handler)
-
-    # Запускаем приложение.
+    change_way = MessageHandler(filters.TEXT & ~filters.COMMAND, change_lang)
+    st = CommandHandler('start', start)
+    application.add_handler(st)
+    application.add_handler(change_way)
     application.run_polling()
 
 
-# Запускаем функцию main() в случае запуска скрипта.
 if __name__ == '__main__':
     main()
