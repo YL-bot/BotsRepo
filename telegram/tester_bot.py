@@ -65,7 +65,8 @@ async def test(update, context):
     last_spis.pop(0)
     if len(last_spis) != 0:
         await context.bot.send_message(update.message.chat_id, text=f'{last_spis[0][0]}')
-        return 1
+        return 2
+      
     else:
         await context.bot.send_message(update.message.chat_id, text=f'Правильных ответов было {count}\n Введите /start для нового теста')
         count = 0
