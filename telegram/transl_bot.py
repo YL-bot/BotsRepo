@@ -10,8 +10,8 @@ BOT_TOKEN = '5921422933:AAGSdehY8F2nXo2UuELxED0MqgCv02y6BzY'
 
 logger = logging.getLogger(__name__)
 bot = Bot(BOT_TOKEN)
-API_KEY = 'AQVNzhfpiSw09Z_EBDWdUtal9XPJR_I5lVASpWlT'
-FOLDER_ID = 'b1go7l39akkvmdgv9j16'
+API_KEY = ''
+FOLDER_ID = ''
 
 
 async def start(update, context):
