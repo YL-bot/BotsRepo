@@ -44,15 +44,11 @@ class TimerBot(commands.Cog):
                     time -= 1
                     await message.edit(content=time)
                     await asyncio.sleep(0.95)
-                await message.edit(content='Time X! GG!')
+                await message.edit(content='Time X! MOMI IS COMING TO BEAT UR A.....')
 
         except ValueError:
-            await ctx.send(
-                "set a timer with command with !set_timer (X) hours (y) minutes (z) seconds "
-                "or !set_timer (x) and that will be the number of seconds")
+            await ctx.send("set a timer with command with !set_timer (X) hours (y) minutes (z) seconds ")
             await ctx.send('Time must be a number')
-
-
 
 
 bot = commands.Bot(command_prefix='!', intents=intents)
