@@ -39,7 +39,7 @@ def main():
             date = i['copy_history'][-1]['date']
             
             print(text)
-            print('date: ', datetime.utcfromtimestamp(int(date)).strftime('%Y-%m-%d'), '; time: ', datetime.utcfromtimestamp(int(date)).strftime('%H:%M:%S'))
+            print('date: ', datetime.fromtimestamp(int(date)).strftime('%Y-%m-%d'), '; time: ', datetime.fromtimestamp(int(date)).strftime('%H:%M:%S'))
             
             
 

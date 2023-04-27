@@ -9,7 +9,7 @@ from telegram import ReplyKeyboardMarkup
 from random import randint
 
 
-BOT_TOKEN = '6181021435:AAERJar6_wtLFDONNE8g0tITitWrGMlHlNE'
+BOT_TOKEN = '5836247928:AAGcLzmtSDnwHgy7l5jkoW6w3ty9KXBGSsw'
 
 
 reply_keyboard = [['/dice', '/timer']]
@@ -141,14 +141,12 @@ async def start(update, context):
     """Отправляет сообщение когда получена команда /start"""
     user = update.effective_user
     await update.message.reply_html(
-        rf"Привет, {user.mention_html()}! Я эхо-бот. Напишите мне что-нибудь, и я пришлю это назад!",
-        reply_markup=markup
-    )
+        rf"Привет, {user.mention_html()}! Поиграем?", reply_markup=markup)
 
 
 async def help_command(update, context):
     """Отправляет сообщение когда получена команда /help"""
-    await update.message.reply_text("Я пока не умею помогать... Я только ваше эхо.")
+    await update.message.reply_text("бож чел ну что сложно выбрать? а?")
 
 
 async def time(update, context):
@@ -227,7 +225,7 @@ async def echo(update, context):
     # У message есть поле text, содержащее текст полученного сообщения,
     # а также метод reply_text(str),
     # отсылающий ответ пользователю, от которого получено сообщение.
-    await update.message.reply_text(f"Я получил сообщение: '{update.message.text}'")
+    await update.message.reply_text(f"мб кнопки нажмешь?")
 
 
 def main():
@@ -252,8 +250,8 @@ def main():
     application.add_handler(CommandHandler("set_timer", set_timer2))
     application.add_handler(CommandHandler("dice", dice))
     application.add_handler(CommandHandler("timer", timer))
-    application.add_handler(CommandHandler("gr6", gr6x1))
-    application.add_handler(CommandHandler("gr62", gr6x2))
+    application.add_handler(CommandHandler("gr6x1", gr6x1))
+    application.add_handler(CommandHandler("gr6x2", gr6x2))
     application.add_handler(CommandHandler("gr20", gr20))
     application.add_handler(CommandHandler("cancel", cancel))
     application.add_handler(CommandHandler("close", close))

@@ -48,6 +48,8 @@ async def set_timer(update, context):
     
     try:
         TIMER = int("".join(list(update.message.text)[list(update.message.text).index('r') + 2:]))
+        if TIMER < 0:
+            TIMER = 5
     except Exception:
         TIMER = 5
     
@@ -72,7 +74,7 @@ async def start(update, context):
     """Отправляет сообщение когда получена команда /start"""
     user = update.effective_user
     await update.message.reply_html(
-        rf"Привет {user.mention_html()}! Я жду проверки ;)",
+        rf"Привет {user.mention_html()}! Укажи время для таймера, default=5)",
     )
 
 
