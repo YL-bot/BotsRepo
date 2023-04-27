@@ -2,6 +2,9 @@ import discord
 import logging
 import requests
 from io import BytesIO
+import os
+from PIL import Image
+
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -9,7 +12,7 @@ handler = logging.StreamHandler()
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-TOKEN = "MTEwMDcxNjIwMzIzNzk4NjMxNQ.G_-KzX.W7gHMGR4S8z00Sae8tsQLBLenmDRRRGtEg6dSg"
+TOKEN = "MTEwMDcxNjIwMzIzNzk4NjMxNQ.GxlE-C.N6E3E2u2zNoHwxP3h2EMIGvyDPxKGdlxtEHbMI"
 
 
 class YLBotClient(discord.Client):
@@ -24,12 +27,16 @@ class YLBotClient(discord.Client):
     async def on_message(self, message):
         if message.author == self.user:
             return
-        if "кот" in message.content.lower():
-            picture = discord.File(BytesIO(requests.get('https://api.thecatapi.com/v1/images/search').content))
-            await message.channel.send(file=picture)
+        
+        if "кот" in message.content.lower(): 
+            file_jpg = requests.get('https://api.thecatapi.com/v1/images/search?limit=1').json()[0]['url']
+            print(file_jpg)
+            await message.channel.send(file_jpg)           
+                
         elif "собак" in message.content.lower() or "собач" in message.content.lower():
-            picture = discord.File(BytesIO(requests.get('https://dog.ceo/api/breeds/image/random').content))
-            await message.channel.send(file=picture)
+            file_jpg = requests.get('https://dog.ceo/api/breeds/image/random').json()['message']
+            await message.channel.send(file_jpg)
+                
         else:
             await message.channel.send("Котики или собачки, ничего больше! КОТИКИ И СОБАЧКИ")
 
