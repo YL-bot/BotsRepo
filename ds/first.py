@@ -1,9 +1,6 @@
 import discord
 import logging
 import requests
-from io import BytesIO
-import os
-from PIL import Image
 
 
 logger = logging.getLogger('discord')
