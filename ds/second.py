@@ -52,7 +52,7 @@ class TimerBot(commands.Cog):
 
 
 bot = commands.Bot(command_prefix='!', intents=intents)
-TOKEN = "MTEwMDcxNjIwMzIzNzk4NjMxNQ.GoOwK8.FAIoendA6DsIwmOJjnIKmFrRhwNW2OlQMUajyU"
+TOKEN = "MTEwMDg2ODIyMjg1ODgyMTY4Mw.GxrMnx.8B0ANmn8FLOSpZK0DHAB-7GVjAHkftcfjtDPi0"
 
 
 async def main():

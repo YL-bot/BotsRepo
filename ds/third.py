@@ -103,7 +103,7 @@ class GrammarBot(commands.Cog):
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-TOKEN = "MTEwMDg2OTcyMTE0ODA5NjYxMg.Gq-V2H.p8mPV91z0AazHBf0N9uzKPTPOgivP2hyecBvcM"
+TOKEN = "MTEwMDg2OTcyMTE0ODA5NjYxMg.G72vgX.xofBtrdbX0GmGIDnBgShGFILmXP5PqRttJ1kHA"
 
 
 async def main():

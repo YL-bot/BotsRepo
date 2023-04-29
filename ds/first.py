@@ -9,7 +9,7 @@ handler = logging.StreamHandler()
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-TOKEN = "MTEwMDcxNjIwMzIzNzk4NjMxNQ.GxlE-C.N6E3E2u2zNoHwxP3h2EMIGvyDPxKGdlxtEHbMI"
+TOKEN = "MTEwMDcxNjIwMzIzNzk4NjMxNQ.GRBwhM.wD_qnUb-mm1mbENW9BBkCTmEksW_zaJhY5_6Bw"
 
 
 class YLBotClient(discord.Client):
